@@ -24,7 +24,10 @@ local highlights = {
     ["@variable"] = { fg = colors.blue },
     ["@keyword"] = { fg = colors.cyan, bold = true, italic = true },
     ["@function"] = { fg = colors.green },
-    ["@punctuation.bracket"] = { fg = colors.paren },
+    ["@punctuation.bracket"] = { fg = colors.white },
+    ["@punctuation.special"] = { fg = colors.paren },
+    ["@punctuation.delimiter"] = { fg = colors.white },
+    ["@character.special"] = { fg = colors.white },
 
 }
 

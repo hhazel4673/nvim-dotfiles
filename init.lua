@@ -3,16 +3,16 @@
 -- ================================================================================================
 
 -- theme & transparency
-vim.cmd.colorscheme("FuckYourEyes")
+vim.cmd.colorscheme("default")
 vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
 vim.api.nvim_set_hl(0, "NormalNC", { bg = "none" })
 vim.api.nvim_set_hl(0, "EndOfBuffer", { bg = "none" })
 
 -- Basic settings
 vim.opt.number = true                              -- Line numbers
-vim.opt.relativenumber = true                      -- Relative line numbers
-vim.opt.cursorline = true                          -- Highlight current line
-vim.opt.wrap = false                               -- Don't wrap lines
+vim.opt.relativenumber = true                      -- Wrapping is fine, may turn off sometimes idk 
+vim.opt.cursorline = true                          -- Highlight current lin
+vim.opt.wrap = true                                -- Don't wrap lines
 vim.opt.scrolloff = 10                             -- Keep 10 lines above/below cursor 
 vim.opt.sidescrolloff = 8                          -- Keep 8 columns left/right of cursor
 
@@ -691,7 +691,7 @@ _G.file_type = file_type
 _G.file_size = file_size
 
 vim.cmd([[
-  highlight StatusLineBold gui=bold cterm=bold
+  highlight StatusLineBold gui=bold cterm=bold 
 ]])
 
 -- Function to change statusline based on window focus
@@ -699,11 +699,12 @@ local function setup_dynamic_statusline()
   vim.api.nvim_create_autocmd({"WinEnter", "BufEnter"}, {
     callback = function()
     vim.opt_local.statusline = table.concat {
-      "  ",
       "%#StatusLineBold#",
+      "  ",
       "%{v:lua.mode_icon()}",
+      " ",
       "%#StatusLine#",
-      " │ %f %h%m%r",
+      "│ %f %h%m%r",
       "%{v:lua.git_branch()}",
       " │ ",
       "%{v:lua.file_type()}",
