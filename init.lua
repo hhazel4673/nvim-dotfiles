@@ -438,6 +438,8 @@ vim.keymap.set('n', '<leader>bd', smart_close_buffer, { desc = 'Smart close buff
 -- ============================================================================
 -- LSP
 -- ===========================================================================
+vim.lsp.set_log_level("trace") -- so I can see what my lsps are doing
+
 -- Function to find project root
 local function find_root(patterns)
     local path = vim.fn.expand('%:p:h')
@@ -445,11 +447,12 @@ local function find_root(patterns)
     return root and vim.fn.fnamemodify(root,':h') or path
 end
 
+--[[ --THIS SHIT SUCKS !!!!!! it's node.js thing eats memory like pancakes
 -- Shell LSP setup
 local function setup_shell_lsp()
     vim.lsp.start({
         name = 'bashls',
-        cmd = {'bash-language-server', 'start'},
+        cmd = {'bash-language-server', 'start', '--extended-analysis=false'},
         filetypes = {'sh', 'bash', 'zsh'},
         root_dir = find_root({'.git', 'Makefile'}),
         settings = {
@@ -459,6 +462,7 @@ local function setup_shell_lsp()
         }
     })
 end
+]]--
 
 --[[
 -- Python LSP setup
@@ -487,12 +491,14 @@ local function setup_python_lsp()
 end
 ]]--
 
+--[[
 -- Auto-start LSPs based on filetype
 vim.api.nvim_create_autocmd('FileType', {
     pattern = 'sh,bash,zsh',
     callback = setup_shell_lsp,
-    desc = 'Start shell LSP'
+    desc = 'Start shell LSP',
 })
+]]--
 
 --[[
 vim.api.nvim_create_autocmd('FileType', {
@@ -510,6 +516,7 @@ local function format_code()
 
     local cursor_pos = vim.api.nvim_wil_get_cursor(0)
 
+    -- Python formatter, more exists as an example than anything
     if filetype == 'python' or filename:match('%.py$') then
         if filename == '' then
             print("Save the file first before formatting Python")
@@ -530,6 +537,7 @@ local function format_code()
         end
     end
 
+    -- Shell script formatter, this also exists more as an example than anything but also useful
     if filetype == 'sh' or filetype == 'bash' or filename:match('%.sh$') then
         local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
         local conftent = table.concat(lines, '\n')
@@ -581,10 +589,11 @@ vim.api.nvim_create_autocmd('LspAttach', {
         vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, opts)
 
         -- Diagnostics
-        vim.keymap.set('n', '<leader>nd', vim.diagnostic,goto_next, opts)
+        vim.keymap.set('n', '<leader>nd', vim.diagnostic.goto_next, opts)
         vim.keymap.set('n', '<leader>pd', vim.diagnostic.goto_prev, opts)
         vim.keymap.set('n', '<leader>d', vim.diagnostic.open_float, opts)
         vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, opts)
+
     end,
 })
 
