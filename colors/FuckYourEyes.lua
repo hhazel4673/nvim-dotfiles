@@ -1,3 +1,4 @@
+-- most of this shit sucks, figure it out yourself I love the default color scheme
 local colors = {
     white  = '#FFFFFF',
     bg     = '#333333',
